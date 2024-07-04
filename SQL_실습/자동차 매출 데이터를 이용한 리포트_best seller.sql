@@ -40,3 +40,22 @@ FROM
 WHERE RNK <= 5
 ORDER BY RNK;
 
+
+-- 연도 적용 안하고 다시 풀이
+SELECT *
+FROM (
+		SELECT D.productName,
+			   SUM(C.quantityOrdered*C.priceEach) AS SALES,		-- 집계값을 select 하게 되면 반드시 group by가 들어가야 한다.
+			   ROW_NUMBER() OVER(ORDER BY SUM(C.quantityOrdered*C.priceEach) DESC) AS RNK
+		FROM customers A
+		LEFT JOIN orders B
+		ON A.customerNumber = B.customerNumber
+		LEFT JOIN orderdetails C
+		ON B.orderNumber = C.orderNumber
+		LEFT JOIN products D
+		ON C.productCode = D.productCode
+		WHERE A.country = 'USA'
+        GROUP BY 1
+        ) A
+WHERE RNK <= 5
+;
