@@ -1,1 +1,0 @@
-USE dummy_survey;
