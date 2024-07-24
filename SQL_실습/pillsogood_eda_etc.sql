@@ -32,7 +32,9 @@ LEFT JOIN recom_survey_product B
 ON A.recom_id = B.recom_id
 LEFT JOIN product C
 ON B.product_id = C.product_id
-GROUP BY 1;
+GROUP BY 1
+ORDER BY 2 DESC;
+
 
 
 -- 같은 계정 내 프로필들(가족들)이 공통으로 찜한 영양제 인기순
