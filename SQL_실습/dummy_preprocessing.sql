@@ -1,3 +1,6 @@
+USE dummy_survey;
+SELECT * FROM dummy_survey;
+
 -- 테이블 전체 확인
 SELECT *
 FROM dummy_survey;

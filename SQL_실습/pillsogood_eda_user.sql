@@ -1,6 +1,4 @@
 USE PillSoGood;
-SELECT * FROM survey;
-
 
 -- 연령별 성별 분포
 WITH TEMP_SE_CNT AS (
