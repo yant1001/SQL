@@ -1,6 +1,9 @@
 USE PillSoGood;
 
 -- 연령별 성별 분포
+SELECT * FROM com_code;
+SELECT * FROM survey_com_code;
+
 WITH TEMP_SE_CNT AS (
 SELECT survey_age_group,
 	   survey_sex,
@@ -198,7 +201,7 @@ FROM TEMP_PIVOT_SMOKING_CNT
 -- P0: 해당 사항 없음, P1: 임신 계획 있음, P2: 수유 중, P3: 임신 중, 1: 선택하지 않음
 -- A0: 거의 마시지 않음, A1: 주 1회, A2: 주 2~3회, A3: 주 4회 이상, 1: 선택하지 않음
 
--- 여성 임산 인구(임신 계획 있거나, 수유 중이거나, 임신 중) 중 음주 응답한 인원
+-- 여성 임신 인구(임신 계획 있거나, 수유 중이거나, 임신 중) 중 음주 응답한 인원
 SELECT survey_age_group,
 	   survey_sex,
        COUNT(survey_alcohol_code) AS ALCOHOL_CNT
