@@ -202,6 +202,17 @@ FROM TEMP_PIVOT_SMOKING_CNT
 -- A0: 거의 마시지 않음, A1: 주 1회, A2: 주 2~3회, A3: 주 4회 이상, 1: 선택하지 않음
 
 -- 여성 임신 인구(임신 계획 있거나, 수유 중이거나, 임신 중) 중 음주 응답한 인원
+USE PillSoGood;
+SELECT * FROM com_code;
+-- 임신 인구
+SELECT survey_age_group,
+	   survey_sex,
+       COUNT(survey_alcohol_code) AS ALCOHOL_CNT
+FROM survey
+WHERE survey_sex='f'
+  AND survey_pregnancy_code IN ('P1', 'P2', 'P3')
+GROUP BY 1, 2;
+-- 임신 인구 중 음주 응답 인원
 SELECT survey_age_group,
 	   survey_sex,
        COUNT(survey_alcohol_code) AS ALCOHOL_CNT
@@ -326,9 +337,9 @@ SELECT * FROM product_like;
 SELECT * FROM survey;
 
 WITH TEMP_PRODUCT_LIKE AS (
-SELECT A.product_name,
-       C.survey_sex,
+SELECT C.survey_sex,
        C.survey_age_group,
+       A.product_name,
        COUNT(B.product_like_id) AS product_like,
        DENSE_RANK() OVER(PARTITION BY survey_sex, survey_age_group ORDER BY COUNT(B.product_like_id) DESC) AS LIKE_RANK
 FROM product A
@@ -389,17 +400,8 @@ LEFT JOIN (
 ON A.user_id = B.user_id
 ;
 
-SELECT A.user_id,
-	   profile_id,
-       survey_sex,
-       survey_age_group,
-       number_of_family
-FROM survey A
-LEFT JOIN (
-			SELECT user_id,
-				   COUNT(user_id) AS number_of_family
-			FROM survey
-			GROUP BY 1
-) B
-ON A.user_id = B.user_id
-;
+SELECT user_id,
+	   COUNT(user_id) AS number_of_family
+FROM survey
+WHERE user_id = '10288'
+GROUP BY 1;
