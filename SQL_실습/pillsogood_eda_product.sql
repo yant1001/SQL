@@ -78,6 +78,7 @@ GROUP BY 1;
 -- 주의사항 카테고리별 (예: 기저질환, 알레르기, 연령 등등) 영양제/영양성분 개수
 SELECT product_caution_code LIKE '%HF%'
 FROM product;
+SELECT * FROM product;
 
 
 /* 코드 보관
