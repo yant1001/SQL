@@ -22,11 +22,12 @@ GROUP BY 1
 ORDER BY 2 DESC;
 
 -- 유저들에게 가장 많이 추천한 영양제 인기순
+SELECT * FROM survey;
 SELECT * FROM recom;
 SELECT * FROM recom_ingredient;
 SELECT * FROM recom_survey_product;
 SELECT product_name,
-	   COUNT(product_name) AS pop_recom_product
+	   COUNT(product_name) AS pop_product_in_recom_survey
 FROM recom A
 LEFT JOIN recom_survey_product B
 ON A.recom_id = B.recom_id
