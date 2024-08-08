@@ -239,13 +239,29 @@ LIMIT 10
 
 
 -- 24. 조건에 맞는 개발자 찾기
+/*
+비트 AND 연산자란? (&)
+두 숫자를 2진수로 변환하여, 각 비트를 비교하고 둘 다 1일 때만 1을 반환한다.
+그렇지 않으면 0을 반환한다.
+예를 들어 `(D.SKILL_CODE & S.CODE) = S.CODE`일 때, `D.SKILL_CODE & S.CODE`가 0011 & 0001이라면 결과는 0001이 된다.
+0011은 0010+0001의 결과이므로, 두 숫자 모두 0001을 가지고 있어서 0001을 반환하는 것.
+이럴 경우 특정 비트가 정확히 해당 스킬을 나타내는지 확인할 수 있다.
+*/
 SELECT ID,
        EMAIL,
        FIRST_NAME,
-       LAST_NAME,
-       NAME
-FROM DEVELOPERS A
-JOIN SKILLCODES B
-ON B.CODE & A.SKILL_CODE = B.CODE
-WHERE B.NAME IN ('Python', 'C#')
+       LAST_NAME
+FROM DEVELOPERS D
+WHERE EXISTS (SELECT *
+              FROM SKILLCODES S
+              WHERE S.NAME IN ('Python', 'C#')
+                AND (D.SKILL_CODE & S.CODE) = S.CODE)
 ORDER BY ID
+
+
+-- 25. 특정 물고기를 잡은 총 수 구하기
+SELECT COUNT(FISH_NAME) AS 'FISH_COUNT'
+FROM FISH_INFO A
+LEFT JOIN FISH_NAME_INFO B
+ON A.FISH_TYPE = B.FISH_TYPE
+WHERE FISH_NAME IN ('BASS', 'SNAPPER')
