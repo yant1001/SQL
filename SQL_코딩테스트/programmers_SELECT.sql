@@ -288,17 +288,6 @@ ORDER BY ID
 
 
 -- 28. 특이 형질을 가지는 대장균 찾기
--- 27. 대장균의 크기에 따라 분류하기 1
-SELECT ID,
-       CASE WHEN SIZE_OF_COLONY <= 100 THEN 'LOW'
-            WHEN SIZE_OF_COLONY BETWEEN 100 AND 1000 THEN 'MEDIUM'
-            ELSE 'HIGH'
-            END AS SIZE
-FROM ECOLI_DATA
-ORDER BY ID
-
-
--- 28. 특정 형질을 가지는 대장균 찾기
 SELECT COUNT(ID) AS COUNT
 FROM ECOLI_DATA
 WHERE GENOTYPE & 2 =0
