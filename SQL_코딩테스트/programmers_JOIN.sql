@@ -124,3 +124,15 @@ WHERE R.MEMBER_ID = (
                     )
 ORDER BY 3, 2
 
+
+-- 10. 보호소에서 중성화한 동물
+SELECT O.ANIMAL_ID,
+       O.ANIMAL_TYPE,
+       O.NAME
+FROM (SELECT *
+      FROM ANIMAL_INS
+      WHERE SEX_UPON_INTAKE LIKE '%Intact%') I
+JOIN ANIMAL_OUTS O
+ON I.ANIMAL_ID = O.ANIMAL_ID
+WHERE O.SEX_UPON_OUTCOME LIKE '%Spayed%' 
+   OR O.SEX_UPON_OUTCOME LIKE '%Neutered%'
