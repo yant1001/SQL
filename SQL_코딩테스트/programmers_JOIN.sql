@@ -160,6 +160,7 @@ SELECT YEAR(SALES_DATE) AS YEAR,
 FROM TEMP_JOIN, TEMP_USER_2021
 GROUP BY 1, 2
 ORDER BY 1, 2
+<<<<<<< HEAD
 
 
 -- 12. FrontEnd 개발자 찾기
@@ -172,3 +173,5 @@ WHERE SKILL_CODE & (SELECT SUM(CODE)
                     FROM SKILLCODES
                     WHERE CATEGORY = 'Front End')
 ORDER BY ID
+=======
+>>>>>>> a4ea3ea2ad7e94993e8095ee3457d9c5d072d94f
