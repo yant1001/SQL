@@ -55,7 +55,7 @@ ORDER BY I.DATETIME
 LIMIT 3
 
 
--- 6. 특정 기간 동안 대여 가능한 자동차들의 대여 비용 구하기 (**재도전**)
+-- 6. 특정 기간 동안 대여 가능한 자동차들의 대여 비용 구하기
 -- 실패 코드
 -- WITH TEMP_JOIN AS (
 -- SELECT A.CAR_ID,
