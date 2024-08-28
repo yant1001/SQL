@@ -7,3 +7,6 @@ WHERE OPTIONS LIKE '%통풍시트%'
     OR OPTIONS LIKE '%가죽시트%'
 GROUP BY 1
 ORDER BY 1
+
+
+-- 2.성분으로 구분한 아이스크림 총 주문량
