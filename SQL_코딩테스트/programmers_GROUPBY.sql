@@ -140,3 +140,46 @@ ORDER BY 1
 
 
 -- 13. 대여 횟수가 많은 자동차들의 월별 대여 횟수 구하기
+SELECT MONTH(START_DATE) AS MONTH,
+       CAR_ID,
+       COUNT(HISTORY_ID) AS RECORDS
+FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+WHERE DATE_FORMAT(START_DATE, '%Y-%m') BETWEEN '2022-08' AND '2022-10'
+AND CAR_ID IN (SELECT CAR_ID
+               FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+               WHERE DATE_FORMAT(START_DATE, '%Y-%m') BETWEEN '2022-08' AND '2022-10'
+               GROUP BY 1
+               HAVING COUNT(HISTORY_ID) >= 5)
+GROUP BY 1, 2
+ORDER BY 1, 2 DESC
+
+
+-- 14. 즐겨찾기가 가장 많은 식당 정보 출력하기
+-- GROUP BY: 그룹화에 사용한 컬럼만 SELECT 절에 직접 명시 후 나머지 컬럼에 대해서는 집계 결과만 적을 수 있습니다.
+--           예를 들어 SELECT FOOD_TYPE, COUNT(*)
+-- HAVING: HAVING절 사용 시 조건이 필요합니다. 조건 미입력시 첫번째 레코드가 선택되어 출력되는 오류가 생깁니다.
+--         예를 들어 MAX(FAVORITES) > 1000과 같이 사용해야 합니다.
+SELECT FOOD_TYPE,
+       REST_ID,
+       REST_NAME,
+       FAVORITES
+FROM REST_INFO
+WHERE (FOOD_TYPE, FAVORITES) IN (SELECT FOOD_TYPE, MAX(FAVORITES)
+                                 FROM REST_INFO
+                                 GROUP BY FOOD_TYPE)
+ORDER BY 1 DESC
+
+
+-- 15. 자동차 대여 기록에서 대여중 / 대여 가능 여부 구분하기
+-- CASE WHEN THEN 구문에서 MAX를 쓰게 되면, 사전순으로 비교되어 유니코드 기준 각 글자의 코드 포인트로 계산 시 
+-- '대여중'이 '대여 가능'보다 더 큰 값으로 간주되기 때문에 더 높은 우선순위를 갖는다.
+SELECT CAR_ID,
+       MAX(CASE WHEN START_DATE <= '2022-10-16' AND END_DATE >= '2022-10-16'
+           THEN '대여중'
+           ELSE '대여 가능'
+           END) AS AVAILABILITY
+FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+GROUP BY CAR_ID
+ORDER BY CAR_ID DESC
+
+
