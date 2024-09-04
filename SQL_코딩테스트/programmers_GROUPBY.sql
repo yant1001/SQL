@@ -156,7 +156,7 @@ ORDER BY 1, 2 DESC
 
 -- 14. 즐겨찾기가 가장 많은 식당 정보 출력하기
 -- GROUP BY: 그룹화에 사용한 컬럼만 SELECT 절에 직접 명시 후 나머지 컬럼에 대해서는 집계 결과만 적을 수 있습니다.
---           예를 들어 SELECT FOOD_TYPE, COUNT(*)
+--           예를 들어 SELECT FOOD_TYPE, COUNT(*). *, COUNT(*)와 같이 집계가 되지 않는 컬럼을 포함하면 오류가 생깁니다.
 -- HAVING: HAVING절 사용 시 조건이 필요합니다. 조건 미입력시 첫번째 레코드가 선택되어 출력되는 오류가 생깁니다.
 --         예를 들어 MAX(FAVORITES) > 1000과 같이 사용해야 합니다.
 SELECT FOOD_TYPE,
@@ -183,3 +183,41 @@ GROUP BY CAR_ID
 ORDER BY CAR_ID DESC
 
 
+-- 16. 조건에 맞는 사용자와 총 거래금액 조회하기
+SELECT WRITER_ID,
+       NICKNAME,
+       TOTAL_SALES
+FROM (SELECT WRITER_ID, SUM(PRICE) AS TOTAL_SALES
+      FROM USED_GOODS_BOARD
+      WHERE STATUS = 'DONE'
+      GROUP BY 1
+      HAVING TOTAL_SALES >= 700000) B
+LEFT JOIN USED_GOODS_USER U
+ON B.WRITER_ID = U.USER_ID
+ORDER BY 3
+
+
+-- 17. 부서별 평균 연봉 조회하기
+SELECT E.DEPT_ID,
+       DEPT_NAME_EN,
+       AVG_SAL
+FROM (SELECT DEPT_ID,
+             ROUND(AVG(SAL), 0) AS AVG_SAL
+      FROM HR_EMPLOYEES
+      GROUP BY 1) E
+LEFT JOIN HR_DEPARTMENT D
+ON E.DEPT_ID = D.DEPT_ID
+ORDER BY 3 DESC
+
+
+-- 18. 특정 조건을 만족하는 물고기별 수와 최대 길이 구하기
+SELECT COUNT(ID) AS FISH_COUNT,
+       MAX(LENGTH) AS MAX_LENGTH,
+       FISH_TYPE
+FROM (SELECT ID,
+             FISH_TYPE,
+             IF(LENGTH IS NULL, 10, LENGTH) AS LENGTH
+      FROM FISH_INFO) INFO
+GROUP BY FISH_TYPE
+HAVING AVG(LENGTH) >= 33
+ORDER BY 3
