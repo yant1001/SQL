@@ -36,3 +36,67 @@ ON B.BOOK_ID = S.BOOK_ID
 WHERE SALES_DATE LIKE '2022-01%'
 GROUP BY B.AUTHOR_ID, CATEGORY
 ORDER BY B.AUTHOR_ID, CATEGORY DESC
+
+
+-- 4. 연간 평가점수에 해당되는 평가 등급 및 성과금 조회하기
+WITH TEMP_GRADE AS (
+SELECT EMP_NO,
+       CASE WHEN AVG(SCORE) >= 96 THEN 'S'
+            WHEN AVG(SCORE) >= 90 THEN 'A'
+            WHEN AVG(SCORE) >= 80 THEN 'B'
+            ELSE 'C'
+       END AS GRADE,
+       CASE WHEN AVG(SCORE) >= 96 THEN 0.2
+            WHEN AVG(SCORE) >= 90 THEN 0.15
+            WHEN AVG(SCORE) >= 80 THEN 0.1
+            ELSE 0
+       END AS BONUS
+FROM HR_GRADE
+GROUP BY 1
+)
+SELECT G.EMP_NO,
+       EMP_NAME,
+       GRADE,
+       SAL*BONUS AS BONUS
+FROM TEMP_GRADE G
+JOIN HR_EMPLOYEES E
+ON G.EMP_NO = E.EMP_NO
+ORDER BY E.EMP_NO
+
+
+-- 5. 입양 시각 구하기(2)
+-- RECURSIVE: 재귀 쿼리
+-- WITH RECURSIVE 쿼리문을 작성하고, 내부에 UNION을 통해 재귀를 구성해요.
+WITH RECURSIVE TEMP_HOUR AS (
+SELECT 0 AS HOUR   -- 비반복문
+UNION ALL          -- UNION 사용 필수
+SELECT HOUR + 1
+FROM TEMP_HOUR     -- 가상의 테이블을 참조하는 반복문
+WHERE HOUR < 23    -- 정지 조건
+),                 -- 0부터 23까지의 값을 갖는 HOUR 컬럼 생성
+TEMP_OUTS AS (
+SELECT HOUR(DATETIME) AS HOUR,
+       COUNT(*) AS COUNT
+FROM ANIMAL_OUTS
+GROUP BY HOUR(DATETIME)
+)
+SELECT H.HOUR,
+       IF(COUNT, COUNT, 0) AS COUNT
+FROM TEMP_HOUR H
+LEFT JOIN TEMP_OUTS O
+ON H.HOUR = O.HOUR
+
+
+-- 6. 특정 세대의 대장균 찾기
+SELECT ID
+FROM ECOLI_DATA
+WHERE PARENT_ID 
+   IN (SELECT ID
+       FROM ECOLI_DATA
+       WHERE PARENT_ID 
+          IN (SELECT ID
+              FROM ECOLI_DATA
+              WHERE PARENT_ID IS NULL
+             )
+        )
+ORDER BY ID
