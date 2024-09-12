@@ -97,7 +97,7 @@ WHERE RNK = 1
 ORDER BY 1 
 
 
--- 9. 대장균의 크기에 따라 분류하기
+-- 9. 대장균의 크기에 따라 분류하기 2
 WITH TEMP_RNK AS (
 SELECT *,
        PERCENT_RANK() OVER (ORDER BY SIZE_OF_COLONY DESC) AS RNK
