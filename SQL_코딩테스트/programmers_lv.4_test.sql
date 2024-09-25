@@ -410,3 +410,6 @@ JOIN TEMP_B B
 ON C.ID = B.ID
 JOIN TEMP_A A
 ON C.ID = A.ID
+
+
+-- lv.5
