@@ -371,7 +371,7 @@ WHERE CATEGORY = 'Front End'
 ORDER BY ID
 
 
-18. 언어별 개발자 분류하기
+-- 18. 언어별 개발자 분류하기
 -- 0924 20분 (오답)
 WITH TEMP_C AS (
 SELECT 'C' AS GRADE
@@ -410,6 +410,3 @@ JOIN TEMP_B B
 ON C.ID = B.ID
 JOIN TEMP_A A
 ON C.ID = A.ID
-
-
--- lv.5
