@@ -23,8 +23,27 @@ ORDER BY 1, 2
 
 
 -- 2. 멸종위기의 대장균 찾기
--- 코드를 작성해주세요
+-- 1003 오답 -> 재귀 사용 필요
+WITH TEMP_GENERATION AS (
 SELECT *
+     , CASE WHEN PARENT_ID IS NULL THEN '1'
+            WHEN PARENT_ID IN (SELECT ID
+                               FROM ECOLI_DATA
+                               WHERE PARENT_ID IS NULL) THEN '2'
+            WHEN PARENT_ID IN (SELECT ID
+                               FROM ECOLI_DATA
+                               WHERE PARENT_ID IN (SELECT ID
+                                                   FROM ECOLI_DATA
+                                                   WHERE PARENT_ID IS NULL)) THEN '3'
+            ELSE '4'
+       END AS 'GENERATION'
 FROM ECOLI_DATA
+)
+SELECT COUNT(*) AS COUNT
+     , GENERATION
+FROM TEMP_GENERATION
 WHERE ID NOT IN (SELECT PARENT_ID
-                 FROM ECOLI_DATA)
+                 FROM TEMP_GENERATION
+                 WHERE PARENT_ID IS NOT NULL)
+GROUP BY GENERATION
+ORDER BY GENERATION
